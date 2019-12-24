@@ -496,6 +496,7 @@ function executeWidgetCode(widget) {
 
         i3DXCompassPlatformServices.getPlatformServices({
             onComplete: function onComplete(e) {
+				console.log(e);
                 widget.swymURL = e[0]['3DSwym'];
 
                 widget.addEvents({
