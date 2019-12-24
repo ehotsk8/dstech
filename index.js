@@ -494,7 +494,7 @@ function executeWidgetCode() {
                 right: '0'
             });
         };
-
+		console.log(widget);
         i3DXCompassPlatformServices.getPlatformServices({
             onComplete: function onComplete(e) {
                 widget.swymURL = e[0]['3DSwym'];
