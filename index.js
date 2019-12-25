@@ -1,6 +1,5 @@
 const dependency = [
-    //'DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices',
-	'DS/i3DXCompassServices/i3DXCompassServices',
+    'DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices',
     'DS/UIKIT/Input/Button',
     'DS/UIKIT/Input/Text',
     'DS/UIKIT/Input/Select',
@@ -10,20 +9,18 @@ const dependency = [
     'DS/UIKIT/Carousel',
     'DS/WAFData/WAFData',
     'DS/UIKIT/Mask',
-    'DS/WebappsUtils/WebappsUtils'
 ];
 
 function executeWidgetCode(widget) {
     'use strict';
-    console.log(widget)
-    
-    require(dependency, function(
+
+    require(dependency, function (
         i3DXCompassPlatformServices,
         Button, Text, Select, File,
         Scroller, Alert, Carousel,
-        WAFData, Mask, WebappsUtils
+        WAFData, Mask
     ) {
-    	
+
         function createSwymPost(infos, content) {
 
             function getToken(cb) {
@@ -54,46 +51,46 @@ function executeWidgetCode(widget) {
 
                 const mediaFiles = infos.find(f => f.key === 'media').value.elements.input.files;
                 const links = [];
-                
+
                 function addMedia(file) {
-                	 const formData = new FormData();
-                     formData.append('community_id', communityId);
-                     formData.append('published', '0');
-                     formData.append('is_illustration', '1');
-                     formData.append('filename', file.name);
-                     formData.append('userFile', file);
-                     	
-                     const addMediaRequest = {
-                         method: 'POST',
-                         async: true,
-                         data: formData,
-                         headers: {
-                             'X-DS-SWYM-CSRFTOKEN': token
-                         },
-                         onComplete: (response, headers, xhr) => {
-                         	widget.notificationElement.add({
-                                  className: 'success',
-                                  message: 'Медиа успешно загружены в 3DSwym'
+                    const formData = new FormData();
+                    formData.append('community_id', communityId);
+                    formData.append('published', '0');
+                    formData.append('is_illustration', '1');
+                    formData.append('filename', file.name);
+                    formData.append('userFile', file);
+
+                    const addMediaRequest = {
+                        method: 'POST',
+                        async: true,
+                        data: formData,
+                        headers: {
+                            'X-DS-SWYM-CSRFTOKEN': token
+                        },
+                        onComplete: (response, headers, xhr) => {
+                            widget.notificationElement.add({
+                                className: 'success',
+                                message: 'Медиа успешно загружены в 3DSwym'
                             });
-                         	const responseJson = JSON.parse(response);
-                         	
-                         	links.push(`<img data-source="swym" data-community-id="${communityId}" data-media-id="${responseJson.result.id_media}" data-media-type="${responseJson.result.media_type}" data-position="center" >`);
-                         	
-                         	if(links.length === mediaFiles.length)
-                         		cb(links)
-                         },
-                         onFailure: (e) => {
-                             console.log('Error: ' + e);
-                             widget.notificationElement.add({
-                                 className: 'error',
-                                 message: 'Ошибка при загрузке медиа в 3DSwym'
-                             });
-                             Mask.unmask(widget.body)
-                         }
-                     }
-                     WAFData.authenticatedRequest(mediaAddUrl, addMediaRequest);
+                            const responseJson = JSON.parse(response);
+
+                            links.push(`<img data-source="swym" data-community-id="${communityId}" data-media-id="${responseJson.result.id_media}" data-media-type="${responseJson.result.media_type}" data-position="center" >`);
+
+                            if (links.length === mediaFiles.length)
+                                cb(links)
+                        },
+                        onFailure: (e) => {
+                            console.log('Error: ' + e);
+                            widget.notificationElement.add({
+                                className: 'error',
+                                message: 'Ошибка при загрузке медиа в 3DSwym'
+                            });
+                            Mask.unmask(widget.body)
+                        }
+                    }
+                    WAFData.authenticatedRequest(mediaAddUrl, addMediaRequest);
                 }
-                
+
                 Array.from(mediaFiles).forEach(f => addMedia(f));
             }
 
@@ -128,13 +125,13 @@ function executeWidgetCode(widget) {
                         let postLink = widget.swymURL + '/%23community:' + result._community.id + '/iquestion:' + result.id;;
                         const user = result.author.first_name + ' ' + result.author.last_name;
                         cb(user, postLink);
-                        
+
                         widget.postLinkHTML = widget.swymURL + '/#community:' + result._community.id + '/iquestion:' + result.id;;
-                        
+
                         Mask.unmask(widget.body);
-                        
-                        if(widget.postLinkHTML)
-                        	widget.openLinkButton.show();
+
+                        if (widget.postLinkHTML)
+                            widget.openLinkButton.show();
                     },
                     onFailure: (e) => {
                         console.log('Error: ' + e);
@@ -152,9 +149,9 @@ function executeWidgetCode(widget) {
             let question = content.outerHTML;
 
             getToken((token) => {
-            	addMedias(token, (links) => {
+                addMedias(token, (links) => {
                     links.forEach(f => {
-                    	question += f;
+                        question += f;
                     });
                     createPost(token, title, question, (fromUser, postUrl) => {
                         const message = `Вопрос: <b>${encodeURI(title)}</b>%0AОт: <strong>${encodeURI(fromUser)}</strong>%0A<a href="${postUrl}">Ссылка на пост</a>`;
@@ -172,7 +169,7 @@ function executeWidgetCode(widget) {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', telegaBotPath);
             xhr.send();
-            xhr.onload = function() {
+            xhr.onload = function () {
 
                 if (xhr.status != 200) {
                     widget.notificationElement.add({
@@ -336,7 +333,7 @@ function executeWidgetCode(widget) {
 
                     function addInfoElement(title, value, key) {
                         value = value instanceof Array ? value[0] : value;
-                        if (value === '' || key === 'media' )
+                        if (value === '' || key === 'media')
                             return;
 
                         infos.push({ value: value, title: title, key: key });
@@ -391,17 +388,17 @@ function executeWidgetCode(widget) {
             const nextButton = new Button({ value: 'Продолжить', className: 'primary' });
             nextButton.getContent().style.marginLeft = '10px';
             nextButton.addEvent('onClick', onNextClick);
-            
+
             const openLinkButton = new Button({ value: 'Ссылка на пост', className: 'success active' });
             openLinkButton.getContent().style.marginLeft = '10px';
-            openLinkButton.addEvent('onClick', () => { 
-            	if(widget.postLinkHTML)
-            		window.open(widget.postLinkHTML, '_blank');
-            	widget.postLinkHTML = undefined;
-            }); 
+            openLinkButton.addEvent('onClick', () => {
+                if (widget.postLinkHTML)
+                    window.open(widget.postLinkHTML, '_blank');
+                widget.postLinkHTML = undefined;
+            });
             widget.openLinkButton = openLinkButton;
             openLinkButton.hide();
-            
+
             const carousel = new Carousel({
                 arrows: false,
                 autoPlay: false,
@@ -456,26 +453,26 @@ function executeWidgetCode(widget) {
                             padding: '0px 10px 0 25px',
                         },
                         html: [{
-                                tag: 'h3',
-                                text: title,
-                                styles: {
-                                    color: '#005686',
-                                    padding: '8px 0'
-                                }
-                            },
-                            contentScroller,
-                            {
-                                tag: 'div',
-                                styles: {
-                                    margin: '20px 15px',
-                                    textAlign: 'center'
-                                },
-                                html: [
-                                    previousButton,
-                                    nextButton,
-                                    openLinkButton
-                                ]
+                            tag: 'h3',
+                            text: title,
+                            styles: {
+                                color: '#005686',
+                                padding: '8px 0'
                             }
+                        },
+                            contentScroller,
+                        {
+                            tag: 'div',
+                            styles: {
+                                margin: '20px 15px',
+                                textAlign: 'center'
+                            },
+                            html: [
+                                previousButton,
+                                nextButton,
+                                openLinkButton
+                            ]
+                        }
                         ]
                     }
                 }
@@ -497,54 +494,15 @@ function executeWidgetCode(widget) {
             });
         };
 
-        console.log(widget)
-        console.log({require: require})
-        console.log(WebappsUtils.getProxifiedWebappsBaseUrl(), WebappsUtils)
 
-        const getServicesURL = `${WebappsUtils.getProxifiedWebappsBaseUrl().split('webapps')[0]}resources/AppsMngt/api/v1/services`;
-        
-        function getServicesInit() {
-            console.log(getServicesURL)
-            const addPostRequest = {
-                method: 'GET',
-                async: true,
-                onComplete: (response, headers, xhr) => {
-                    const result = JSON.parse(response);
-                    console.log(result)
-                    widget.swymURL = result.platforms.find(f=>f).services.find(fx=>fx.name === '3DSwym');
+        widget.swymURL = widget.getValue('SWYM_URL');
 
-                    widget.addEvents({
-                        onLoad: onLoad,
-                        onRefresh: onLoad,
-                        onResize: function onResize() {}
-                    });
-                },
-                onFailure: (e) => {
-                    console.log('Error: ' + e);
-                }
-            }
-            WAFData.authenticatedRequest(getServicesURL, addPostRequest);
-        }
-        getServicesInit();
-        
-//        let tenant = widget.getValue('x3dPlatformId');
-//        tenant = tenant.length > 0 ? tenant : widget.getValue('TENANT');
-//
-//        i3DXCompassPlatformServices.getPlatformServices({
-//        	platformId : tenant,
-//            onComplete: function onComplete(e) {
-//                widget.swymURL = e['3DSwym'];
-//
-//                widget.addEvents({
-//                    onLoad: onLoad,
-//                    onRefresh: onLoad,
-//                    onResize: function onResize() {}
-//                });
-//            },
-//            onFailure: function onFailure(e) {
-//                console.error(e);
-//            }
-//        });
+        widget.addEvents({
+            onLoad: onLoad,
+            onRefresh: onLoad,
+            onResize: function onResize() { }
+        });
+
         widget.setAutoRefresh(-1);
     });
 }
