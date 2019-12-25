@@ -14,22 +14,18 @@
     <script type="text/javascript" src="../UIKIT/UIKIT.js"></script>
     <link rel="stylesheet" href="../UIKIT/UIKIT.css" />
 
-    <script type="text/javascript" src="./index.js"></script>
+    <script type="text/javascript" src="index.js"></script>
 
     <widget:preferences>
-        <!-- <widget:preference type="hidden" name="SERVER" defaultValue="dspart001-eu1-partners" />-->
         <!-- <widget:preference type="hidden" name="CHANNEL" defaultValue="dsrussiatechclub" /> -->
         <widget:preference type="hidden" name="CHANNEL" defaultValue="-1001255384579" />
-        <widget:preference type="hidden" name="COMMUNITY_ID" defaultValue="3jnbbhBeT7q3ioBmKeXV7Q" />
-        <!-- <widget:preference type="hidden" name="COMMUNITY_ID" defaultValue="DS RUSSIA TECH CLUB" /> -->
+        <widget:preference type="hidden" name="COMMUNITY_ID" defaultValue="o_iNrhy3SBqpQSPTGksbAQ" />
     </widget:preferences>
 
     <script type="text/javascript">
-    	var link = require.s.contexts._.config.paths["DS/i3DXCompassServices"].split('/i3DXCompassServices')[0]
+    	var link = require.s.contexts._.config.paths["DS/i3DXCompassServices"].split('i3DXCompassServices')[0]
 		require.config({ paths: { 'DS': link }});
-		
-        console.log({require: require})
-
+    
         function widgetLoading() {
             typeof widget != "undefined" && widget 
             	? executeWidgetCode(widget) 

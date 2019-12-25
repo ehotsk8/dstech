@@ -1,5 +1,6 @@
 const dependency = [
-    'DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices',
+    //'DS/i3DXCompassPlatformServices/i3DXCompassPlatformServices',
+	'DS/i3DXCompassServices/i3DXCompassServices',
     'DS/UIKIT/Input/Button',
     'DS/UIKIT/Input/Text',
     'DS/UIKIT/Input/Select',
@@ -8,7 +9,8 @@ const dependency = [
     'DS/UIKIT/Alert',
     'DS/UIKIT/Carousel',
     'DS/WAFData/WAFData',
-    'DS/UIKIT/Mask'
+    'DS/UIKIT/Mask',
+    'DS/WebappsUtils/WebappsUtils'
 ];
 
 function executeWidgetCode(widget) {
@@ -19,8 +21,9 @@ function executeWidgetCode(widget) {
         i3DXCompassPlatformServices,
         Button, Text, Select, File,
         Scroller, Alert, Carousel,
-        WAFData, Mask
+        WAFData, Mask, WebappsUtils
     ) {
+    	
         function createSwymPost(infos, content) {
 
             function getToken(cb) {
@@ -494,21 +497,52 @@ function executeWidgetCode(widget) {
             });
         };
 
-        i3DXCompassPlatformServices.getPlatformServices({
-            onComplete: function onComplete(e) {
-				console.log(e);
-                widget.swymURL = e[0]['3DSwym'];
+        console.log(widget)
 
-                widget.addEvents({
-                    onLoad: onLoad,
-                    onRefresh: onLoad,
-                    onResize: function onResize() {}
-                });
-            },
-            onFailure: function onFailure(e) {
-                console.error(e);
+        const getServicesURL = `${WebappsUtils.getWebappsBaseUrl().split('webapps')[0]}resources/AppsMngt/api/v1/services`;
+        
+        function getServicesInit() {
+            console.log(getServicesURL)
+            const addPostRequest = {
+                method: 'GET',
+                async: true,
+                onComplete: (response, headers, xhr) => {
+                    const result = JSON.parse(response);
+                    console.log(result)
+                    widget.swymURL = result.platforms.find(f=>f).services.find(fx=>fx.name === '3DSwym');
+
+                    widget.addEvents({
+                        onLoad: onLoad,
+                        onRefresh: onLoad,
+                        onResize: function onResize() {}
+                    });
+                },
+                onFailure: (e) => {
+                    console.log('Error: ' + e);
+                }
             }
-        });
+            WAFData.authenticatedRequest(getServicesURL, addPostRequest);
+        }
+        getServicesInit();
+        
+//        let tenant = widget.getValue('x3dPlatformId');
+//        tenant = tenant.length > 0 ? tenant : widget.getValue('TENANT');
+//
+//        i3DXCompassPlatformServices.getPlatformServices({
+//        	platformId : tenant,
+//            onComplete: function onComplete(e) {
+//                widget.swymURL = e['3DSwym'];
+//
+//                widget.addEvents({
+//                    onLoad: onLoad,
+//                    onRefresh: onLoad,
+//                    onResize: function onResize() {}
+//                });
+//            },
+//            onFailure: function onFailure(e) {
+//                console.error(e);
+//            }
+//        });
         widget.setAutoRefresh(-1);
     });
 }
