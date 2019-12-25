@@ -499,9 +499,9 @@ function executeWidgetCode(widget) {
 
         console.log(widget)
         console.log({require: require})
-        console.log(WebappsUtils.getWebappsBaseUrl(), WebappsUtils)
+        console.log(WebappsUtils.getProxifiedWebappsBaseUrl(), WebappsUtils)
 
-        const getServicesURL = `${WebappsUtils.getWebappsBaseUrl().split('webapps')[0]}resources/AppsMngt/api/v1/services`;
+        const getServicesURL = `${WebappsUtils.getProxifiedWebappsBaseUrl().split('webapps')[0]}resources/AppsMngt/api/v1/services`;
         
         function getServicesInit() {
             console.log(getServicesURL)
