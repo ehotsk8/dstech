@@ -76,7 +76,7 @@ function executeWidgetCode(widget) {
 
                             links.push(`<img data-source="swym" data-community-id="${communityId}" data-media-id="${responseJson.result.id_media}" data-media-type="${responseJson.result.media_type}" data-position="center" >`);
 
-                            if (links.length === mediaFiles.length || mediaFiles.length === 0)
+                            if (links.length === mediaFiles.length)
                                 cb(links)
                         },
                         onFailure: (e) => {
@@ -92,6 +92,9 @@ function executeWidgetCode(widget) {
                 }
 
                 Array.from(mediaFiles).forEach(f => addMedia(f));
+
+                if(mediaFiles.length === 0) 
+                    cb([])
             }
 
             function createPost(token, title, question, cb) {
