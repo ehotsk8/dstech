@@ -17,20 +17,23 @@
     <script type="text/javascript" src="index.js"></script>
 
     <widget:preferences>
-        <!-- <widget:preference type="hidden" name="SERVER" defaultValue="dspart001-eu1-partners" />-->
-        <!-- <widget:preference type="hidden" name="CHANNEL" defaultValue="dsrussiatechclub" /> -->
+        <widget:preference type="hidden" name="SWYM_URL" defaultValue="https://r1132100006595-eu1-3dswym.3dexperience.3ds.com/" />
         <widget:preference type="hidden" name="CHANNEL" defaultValue="-1001255384579" />
-        <widget:preference type="hidden" name="COMMUNITY_ID" defaultValue="3jnbbhBeT7q3ioBmKeXV7Q" />
+        <widget:preference type="hidden" name="COMMUNITY_ID" defaultValue="o_iNrhy3SBqpQSPTGksbAQ" />
     </widget:preferences>
 
     <script type="text/javascript">
-    	var link = require.s.contexts._.config.paths["DS/i3DXCompassServices"].split('i3DXCompassServices')[0]
-		require.config({ paths: { 'DS': link }});
-    
+        var link = require.s.contexts._.config.paths["DS/i3DXCompassServices"].split('i3DXCompassServices')[0]
+        require.config({
+            paths: {
+                'DS': link
+            }
+        });
+
         function widgetLoading() {
-            typeof widget != "undefined" && widget 
-            	? executeWidgetCode(widget) 
-            	: setTimeout(widgetLoading, 50);
+            typeof widget != "undefined" && widget ?
+                executeWidgetCode(widget) :
+                setTimeout(widgetLoading, 50);
         }
         widgetLoading();
     </script>
