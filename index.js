@@ -167,7 +167,7 @@ function executeWidgetCode(widget) {
         function sendTelegramMessage(text) {
 
             const botApi = 'https://api.telegram.org';
-            const telegaBotPath = `${botApi}/bot${widget.getValue('BID')}:AAGmQpj7CVmycg8-4XOk2IqexHaXdF3fl0o/sendMessage?chat_id=${widget.getValue('CHANNEL')}&parse_mode=HTML&text=${text}`;
+            const telegaBotPath = `${botApi}/bot${widget.getValue('BID')}/sendMessage?chat_id=${widget.getValue('CHANNEL')}&parse_mode=HTML&text=${text}`;
 
             let xhr = new XMLHttpRequest();
             xhr.open('GET', telegaBotPath);
